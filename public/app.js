@@ -1,3 +1,11 @@
+// ---------- Mobile-friendly error reporting (no devtools needed) ----------
+window.addEventListener('error', (e) => {
+  alert('JS error: ' + e.message + '\n(' + e.filename + ':' + e.lineno + ')');
+});
+window.addEventListener('unhandledrejection', (e) => {
+  alert('Unhandled error: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+});
+
 const state = {
   bots: [],
   activeId: null,
@@ -209,4 +217,3 @@ el.saveEnv.addEventListener('click', async () => {
 // ---------- Poll for status/uptime updates ----------
 setInterval(loadBots, 5000);
 loadBots();
-                               
