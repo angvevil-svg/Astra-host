@@ -171,6 +171,11 @@ el.btnEnv.addEventListener('click', () => {
 });
 el.cancelEnv.addEventListener('click', () => (el.envModal.hidden = true));
 el.saveEnv.addEventListener('click', async () => {
+  if (!state.activeId) {
+    alert('No bot selected — close this and click a bot in the sidebar first.');
+    return;
+  }
+
   const lines = el.envText.value.split('\n').map((l) => l.trim()).filter(Boolean);
   const env = {};
   for (const line of lines) {
@@ -178,14 +183,30 @@ el.saveEnv.addEventListener('click', async () => {
     if (idx === -1) continue;
     env[line.slice(0, idx).trim()] = line.slice(idx + 1).trim();
   }
-  await fetch(`/api/bots/${state.activeId}/env`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ env })
-  });
-  el.envModal.hidden = true;
+
+  el.saveEnv.disabled = true;
+  el.saveEnv.textContent = 'Saving…';
+  try {
+    const res = await fetch(`/api/bots/${state.activeId}/env`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ env })
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || `Server returned ${res.status}`);
+    }
+    el.envModal.hidden = true;
+  } catch (err) {
+    alert('Could not save environment variables: ' + err.message);
+    console.error(err);
+  } finally {
+    el.saveEnv.disabled = false;
+    el.saveEnv.textContent = 'Save';
+  }
 });
 
 // ---------- Poll for status/uptime updates ----------
 setInterval(loadBots, 5000);
 loadBots();
+                               
