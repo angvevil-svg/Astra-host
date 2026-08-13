@@ -1,0 +1,14 @@
+{
+  "name": "astra-host",
+  "version": "1.0.0",
+  "description": "Single-user dashboard for uploading, running, and monitoring your own Node.js bots.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "adm-zip": "^0.5.14"
+  }
+}
