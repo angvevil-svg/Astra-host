@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Astra Host — bot dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__mark">☾ <span>Astra Host</span></div>
+  <button class="btn btn--primary" id="openUpload">+ Add bot</button>
+</header>
+
+<main class="layout">
+
+  <section class="botlist" id="botlist" aria-label="Your bots">
+    <div class="empty" id="emptyState">
+      <p>No bots yet.</p>
+      <p class="empty__sub">Upload a zipped Node.js project to get started.</p>
+    </div>
+  </section>
+
+  <section class="detail" id="detail" hidden>
+    <div class="detail__header">
+      <div>
+        <h2 id="detailName">—</h2>
+        <p class="detail__meta" id="detailMeta">—</p>
+      </div>
+      <div class="detail__actions">
+        <button class="btn btn--outline" id="btnInstall">Install deps</button>
+        <button class="btn btn--outline" id="btnEnv">Environment</button>
+        <button class="btn btn--danger-outline" id="btnDelete">Delete</button>
+      </div>
+    </div>
+
+    <div class="detail__controls">
+      <button class="btn btn--primary" id="btnStart">▶ Start</button>
+      <button class="btn btn--outline" id="btnRestart">↻ Restart</button>
+      <button class="btn btn--danger" id="btnStop">■ Stop</button>
+    </div>
+
+    <div class="logs" id="logs" aria-live="polite"></div>
+  </section>
+
+</main>
+
+<!-- Upload modal -->
+<div class="modal-backdrop" id="uploadModal" hidden>
+  <div class="modal">
+    <h3>Add a bot</h3>
+    <p class="modal__sub">Upload a .zip of your Node.js bot's project folder.</p>
+    <form id="uploadForm">
+      <label>
+        Name
+        <input type="text" name="name" placeholder="Astra Bot" required />
+      </label>
+      <label>
+        Entry file
+        <input type="text" name="entryFile" placeholder="index.js" value="index.js" required />
+      </label>
+      <label class="file-drop" id="fileDrop">
+        <input type="file" name="bundle" accept=".zip" required />
+        <span id="fileLabel">Choose a .zip file…</span>
+      </label>
+      <div class="modal__actions">
+        <button type="button" class="btn btn--outline" id="cancelUpload">Cancel</button>
+        <button type="submit" class="btn btn--primary">Upload</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Env modal -->
+<div class="modal-backdrop" id="envModal" hidden>
+  <div class="modal">
+    <h3>Environment variables</h3>
+    <p class="modal__sub">One <code>KEY=value</code> per line. Saved to this bot only.</p>
+    <textarea id="envText" rows="8" spellcheck="false" placeholder="DISCORD_TOKEN=...
+CLIENT_ID=..."></textarea>
+    <div class="modal__actions">
+      <button type="button" class="btn btn--outline" id="cancelEnv">Cancel</button>
+      <button type="button" class="btn btn--primary" id="saveEnv">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
